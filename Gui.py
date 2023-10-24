@@ -12,7 +12,10 @@ class ToolBox(ttk.Frame):
         self.port_config_button = tk.Button(self, text="Configure port",
                                             command=self.open_port_config_window)
         self.port_config_button.pack(side="left")
-
+        # button for openning jog operation window
+        self.jog_operation_button = tk.Button(self, text="Jog Operation",
+                                            command=self.open_jog_operation_window)
+        self.jog_operation_button.pack(side="left")
         self.place(x=0, y=0, width=500, height=25)
 
     def open_port_config_window(self):
@@ -21,6 +24,11 @@ class ToolBox(ttk.Frame):
         self.port_window.geometry("600x220")
         self.port_frame = PortConfigurationFrame(self.port_window)
 
+    def open_jog_operation_window(self):
+        self.jog_window = tk.Toplevel()
+        self.jog_window.title("Jog Operation")
+        self.jog_window.geometry("600x700")
+        self.jog_frame = JogOperationFrame(self.jog_window)
 
 class PortConfigurationFrame(ttk.Frame):
     """
@@ -99,7 +107,77 @@ class PortConfigurationFrame(ttk.Frame):
 
         # packing our frame
         self.pack()
+class JogOperationFrame(tk.Frame):
+    """
+        Window for port configuration, here we have code to configure and enstablish com connection
+    """
 
+
+    def __init__(self, container):
+        super().__init__(container)
+        options = {'padx': 5, 'pady': 5}
+        # frame with jog parts
+        self.default_settings_frame = tk.Frame(self, highlightbackground="grey", highlightthickness=1)
+        self.default_settings_frame.grid(row=0, column=0, **options)
+
+        # Labels
+        tk.Label(self.default_settings_frame, text="Waist").grid(row=0, column=0, **options)
+        tk.Label(self.default_settings_frame, text="Shoulder").grid(row=1, column=0,  **options)
+        tk.Label(self.default_settings_frame, text="Elbow").grid(row=2, column=0, **options)
+        tk.Label(self.default_settings_frame, text="Twist").grid(row=3, column=0,  **options)
+        tk.Label(self.default_settings_frame, text="Pitch").grid(row=4, column=0,  **options)
+        tk.Label(self.default_settings_frame, text="Roll").grid(row=5, column=0,  **options)
+        # Arrow buttons
+        self.left_waist = tk.Button(self.default_settings_frame, text="🠸")
+        self.left_waist.grid(row=0, column=1, **options)
+        self.right_waist = tk.Button(self.default_settings_frame, text="🠺")
+        self.right_waist.grid(row=0, column=2, **options)
+
+        self.left_shoulder = tk.Button(self.default_settings_frame, text="🠸")
+        self.left_shoulder.grid(row=1, column=1, **options)
+        self.right_shoulder = tk.Button(self.default_settings_frame, text="🠺")
+        self.right_shoulder.grid(row=1, column=2, **options)
+
+        self.left_elbow = tk.Button(self.default_settings_frame, text="🠸")
+        self.left_elbow.grid(row=2, column=1, **options)
+        self.right_elbow = tk.Button(self.default_settings_frame, text="🠺")
+        self.right_elbow.grid(row=2, column=2, **options)
+
+        self.left_twist = tk.Button(self.default_settings_frame, text="🠸")
+        self.left_twist.grid(row=3, column=1, **options)
+        self.right_twist = tk.Button(self.default_settings_frame, text="🠺")
+        self.right_twist.grid(row=3, column=2, **options)
+
+        self.left_pitch = tk.Button(self.default_settings_frame, text="🠸")
+        self.left_pitch.grid(row=4, column=1, **options)
+        self.right_pitch = tk.Button(self.default_settings_frame, text="🠺")
+        self.right_pitch.grid(row=4, column=2, **options)
+
+        self.left_roll = tk.Button(self.default_settings_frame, text="🠸")
+        self.left_roll.grid(row=5, column=1, **options)
+        self.right_roll = tk.Button(self.default_settings_frame, text="🠺")
+        self.right_roll.grid(row=5, column=2, **options)
+
+
+        # packing our frame
+        self.pack()
+
+
+class Wczytywanie_danych(ttk.Frame):
+    """
+        Toolbox in app, here will be fields and methods handling some config windows
+    """
+    def __init__(self, container):
+        super().__init__(container)
+        options = {'padx': 5, 'pady': 5}
+        # label for send
+        tk.Label(self, text="Send:").grid(row=0, column=0)
+        self.send_entry = tk.Entry(self)
+        self.send_entry.grid(row=0, column=1)
+        self.place(x=0, y=25, width=500, height=50)
+        # buttons for send
+        self.connect_button = tk.Button(self, text="Send")
+        self.connect_button.grid(row=3, column=1)
 
 class App(tk.Tk):
     """
@@ -108,9 +186,10 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title('Roboty Przemyslowe')
-        self.geometry('800x500')
+        self.geometry('500x300')
         # ToolBox
         ToolBox(self)
+        Wczytywanie_danych(self)
 
 
 def main():
