@@ -53,10 +53,10 @@ class PortConfigurationFrame(ttk.Frame):
         self.default_settings_frame.grid(row=0, column=0, **options)
 
         # Add buttons to frame
-        self.default_config_1 = tk.Button(self.default_settings_frame, text="Default 1",
+        self.default_config_1 = tk.Button(self.default_settings_frame, text="Default COM",
                                           command=self.insert_default_settings)
         self.default_config_1.grid(row=0, column=0, **options)
-        self.default_config_2 = tk.Button(self.default_settings_frame, text="Default 2",
+        self.default_config_2 = tk.Button(self.default_settings_frame, text="Test Send",
                                           command=self.send_some_info)
         self.default_config_2.grid(row=0, column=1, **options)
 
@@ -203,19 +203,24 @@ class JogOperationFrame(tk.Frame):
         self.pack()
 
 
-class Wczytywanie_danych(ttk.Frame):
+class WczytywanieDanych(ttk.Frame):
     def __init__(self, container):
         super().__init__(container)
         self.app = container
         options = {'padx': 5, 'pady': 5}
-        # label for send
         tk.Label(self, text="Send:").grid(row=0, column=0)
-        self.send_entry = tk.Entry(self)
+        self.entry_var = tk.StringVar()
+        self.send_entry = tk.Entry(self, textvariable=self.entry_var)
         self.send_entry.grid(row=0, column=1)
         self.place(x=0, y=25, width=500, height=50)
         # buttons for send
-        self.connect_button = tk.Button(self, text="Send")
-        self.connect_button.grid(row=3, column=1)
+        self.send_button = tk.Button(self, text="Send", command=self.send_writen_command)
+        self.send_button.grid(row=3, column=1)
+
+    def send_writen_command(self):
+        if self.entry_var and self.app.com_port is not None:
+            comm = self.entry_var.get() + '\r'
+            self.app.com_port.write(comm.encode())
 
 
 class App(tk.Tk):
@@ -228,7 +233,7 @@ class App(tk.Tk):
         self.geometry('500x300')
         self.com_port = None
         ToolBox(self, self)
-        Wczytywanie_danych(self)
+        WczytywanieDanych(self)
 
     def set_com_port(self, com_port):
         self.com_port = com_port
