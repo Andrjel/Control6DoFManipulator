@@ -26,24 +26,24 @@ class PortConfigurationFrame(ttk.Frame):
     """
         Window for port configuration, here we have code to configure and enstablish com connection
     """
-    param_dict = {
-        'Send Timeout': tk.IntVar,
-        'Receive Timeout': tk.IntVar,
-        'Port': tk.StringVar,
-        'Baud Rate': tk.IntVar,
-        'Data Bits': tk.IntVar,
-        'Parity': tk.StringVar,
-        'Stop Bits': tk.IntVar
-    }
 
     def __init__(self, container):
         super().__init__(container)
+        self.param_dict = {
+            'Send Timeout': tk.IntVar(),
+            'Receive Timeout': tk.IntVar(),
+            'Port': tk.StringVar(),
+            'Baud Rate': tk.IntVar(),
+            'Data Bits': tk.IntVar(),
+            'Parity': tk.StringVar(),
+            'Stop Bits': tk.IntVar()
+        }
         options = {'padx': 5, 'pady': 5}
         # frame with default settings buttons:
         self.default_settings_frame = tk.Frame(self, highlightbackground="grey", highlightthickness=1)
         self.default_settings_frame.grid(row=0, column=0, **options)
         # add buttons to frame
-        self.default_config_1 = tk.Button(self.default_settings_frame, text="default_1")
+        self.default_config_1 = tk.Button(self.default_settings_frame, text="default_1", command=self.insert_default_settings)
         self.default_config_1.grid(row=0, column=0, **options)
         self.default_config_2 = tk.Button(self.default_settings_frame, text="default_2")
         self.default_config_2.grid(row=0, column=1, **options)
@@ -52,9 +52,9 @@ class PortConfigurationFrame(ttk.Frame):
         self.timeout_frame = tk.Frame(self, highlightbackground="grey", highlightthickness=1)
         self.timeout_frame.grid(row=1, column=0, **options)
         # timeout entries
-        self.send_timeout_entry = tk.Entry(self.timeout_frame)
+        self.send_timeout_entry = tk.Entry(self.timeout_frame, textvariable=self.param_dict['Send Timeout'])
         self.send_timeout_entry.grid(row=0, column=1, **options)
-        self.receive_timeout_entry = tk.Entry(self.timeout_frame)
+        self.receive_timeout_entry = tk.Entry(self.timeout_frame, textvariable=self.param_dict['Receive Timeout'])
         self.receive_timeout_entry.grid(row=1, column=1, **options)
         # timeout labels
         tk.Label(self.timeout_frame, text="Send:").grid(row=0, column=0, sticky=tk.W, **options)
@@ -99,6 +99,10 @@ class PortConfigurationFrame(ttk.Frame):
 
         # packing our frame
         self.pack()
+
+    def insert_default_settings(self):
+        self.param_dict['Send Timeout'].set(tk.IntVar, 2)
+        self.param_dict['Receive Timeout'].set(tk.IntVar, 5)
 
 
 class App(tk.Tk):

@@ -4,9 +4,10 @@ import time
 
 class ComPort:
     def __init__(self, port_name: str):
-        self.__ser = serial.Serial(port_name, baudrate=9600, bytesize=serial.EIGHTBITS,
-                                   parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE
-                                   )
+        self.__ser = serial.Serial(
+            port_name, baudrate=9600, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE
+        )
 
     def open_port(self):
         self.__ser.open()
