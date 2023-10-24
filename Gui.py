@@ -7,8 +7,9 @@ class ToolBox(ttk.Frame):
     """
         Toolbox in app, here will be fields and methods handling some config windows
     """
-    def __init__(self, container):
+    def __init__(self, container, app):
         super().__init__(container)
+        self.app = app
         # button for openning com port config
         self.port_config_button = tk.Button(self, text="Configure port",
                                             command=self.open_port_config_window)
@@ -23,13 +24,14 @@ class ToolBox(ttk.Frame):
         self.port_window = tk.Toplevel()
         self.port_window.title("Port Configuration")
         self.port_window.geometry("600x220")
-        self.port_frame = PortConfigurationFrame(self.port_window)
+        self.port_frame = PortConfigurationFrame(self.port_window, self.app)
 
     def open_jog_operation_window(self):
         self.jog_window = tk.Toplevel()
         self.jog_window.title("Jog Operation")
         self.jog_window.geometry("600x700")
-        self.jog_frame = JogOperationFrame(self.jog_window)
+        self.jog_frame = JogOperationFrame(self.jog_window, self.app)
+
 
 class PortConfigurationFrame(ttk.Frame):
     def __init__(self, container, app):
@@ -116,14 +118,45 @@ class PortConfigurationFrame(ttk.Frame):
 
         # packing our frame
         self.pack()
+
+    def insert_default_settings(self):
+        self.param_dict['Send Timeout'].set(2)
+        self.param_dict['Receive Timeout'].set(5)
+        self.param_dict['Port'].set('COM5')
+        self.param_dict['Baud Rate'].set(9600)
+        self.param_dict['Data Bits'].set(8)
+        self.param_dict['Parity'].set('Even')
+        self.param_dict['Stop Bits'].set(2)
+
+    def get_configuration(self):
+        return self.param_dict
+
+    def on_connect(self):
+        if self.app.com_port:
+            return 0
+        com_port = ComPort(**{
+            'Port': self.param_dict['Port'].get(),
+            'Baud Rate': self.param_dict['Baud Rate'].get(),
+            'Data Bits': self.param_dict['Data Bits'].get(),
+            'Parity': self.param_dict['Parity'].get(),
+            'Stop Bits': self.param_dict['Stop Bits'].get(),
+            'Send Timeout': self.param_dict['Send Timeout'].get(),
+            'Read Timeout': self.param_dict['Receive Timeout'].get()
+        })
+        self.app.set_com_port(com_port)
+
+    def on_disconnect(self):
+        self.app.com_port.close()
+        self.app.com_port = None
+
+    def send_some_info(self):
+        self.app.com_port.write(b'Hello')
+
+
 class JogOperationFrame(tk.Frame):
-    """
-        Window for port configuration, here we have code to configure and enstablish com connection
-    """
-
-
-    def __init__(self, container):
+    def __init__(self, container, app):
         super().__init__(container)
+        self.app = app
         options = {'padx': 5, 'pady': 5}
         # frame with jog parts
         self.default_settings_frame = tk.Frame(self, highlightbackground="grey", highlightthickness=1)
@@ -167,67 +200,13 @@ class JogOperationFrame(tk.Frame):
         self.right_roll = tk.Button(self.default_settings_frame, text="🠺")
         self.right_roll.grid(row=5, column=2, **options)
 
-
-        # packing our frame
         self.pack()
 
 
-    def insert_default_settings(self):
-        self.param_dict['Send Timeout'].set(2)
-        self.param_dict['Receive Timeout'].set(5)
-        self.param_dict['Port'].set('COM5')
-        self.param_dict['Baud Rate'].set(9600)
-        self.param_dict['Data Bits'].set(8)
-        self.param_dict['Parity'].set('Even')
-        self.param_dict['Stop Bits'].set(2)
-
-    def get_configuration(self):
-        return self.param_dict
-
-    def on_connect(self):
-        if self.app.com_port:
-            return 0
-        com_port = ComPort(**{
-            'Port': self.param_dict['Port'].get(),
-            'Baud Rate': self.param_dict['Baud Rate'].get(),
-            'Data Bits': self.param_dict['Data Bits'].get(),
-            'Parity': self.param_dict['Parity'].get(),
-            'Stop Bits': self.param_dict['Stop Bits'].get(),
-            'Send Timeout': self.param_dict['Send Timeout'].get(),
-            'Read Timeout': self.param_dict['Receive Timeout'].get()
-        })
-        self.app.set_com_port(com_port)
-
-    def on_disconnect(self):
-        self.app.com_port.close()
-        self.app.com_port = None
-
-
-    def send_some_info(self):
-        self.app.com_port.write(b'Hello')
-
-
-class ToolBox(ttk.Frame):
-    def __init__(self, container, app):
-        super().__init__(container)
-        self.app = app
-        self.port_config_button = tk.Button(self, text="Configure port", command=self.open_port_config_window)
-        self.port_config_button.pack(side="left")
-        self.place(x=0, y=0, width=500, height=25)
-
-    def open_port_config_window(self):
-        self.port_window = tk.Toplevel()
-        self.port_window.title("Port Configuration")
-        self.port_window.geometry("600x220")
-        self.port_config = PortConfigurationFrame(self.port_window, self.app)
-
-
 class Wczytywanie_danych(ttk.Frame):
-    """
-        Toolbox in app, here will be fields and methods handling some config windows
-    """
     def __init__(self, container):
         super().__init__(container)
+        self.app = container
         options = {'padx': 5, 'pady': 5}
         # label for send
         tk.Label(self, text="Send:").grid(row=0, column=0)
@@ -238,6 +217,7 @@ class Wczytywanie_danych(ttk.Frame):
         self.connect_button = tk.Button(self, text="Send")
         self.connect_button.grid(row=3, column=1)
 
+
 class App(tk.Tk):
     """
         Main app class
@@ -245,16 +225,13 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title('Roboty Przemyslowe')
-        self.geometry('800x500')
+        self.geometry('500x300')
         self.com_port = None
         ToolBox(self, self)
+        Wczytywanie_danych(self)
 
     def set_com_port(self, com_port):
         self.com_port = com_port
-        self.geometry('500x300')
-        # ToolBox
-        ToolBox(self)
-        Wczytywanie_danych(self)
 
 
 def main():
