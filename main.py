@@ -13,7 +13,7 @@ def main():
     app = App()
     app.mainloop()
     # com = ComPort("COM5")
-    # com.send_message(b"Hello")
+    # com.write(b'Hello')
 
 
 if __name__ == "__main__":
