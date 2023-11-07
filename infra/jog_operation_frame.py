@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from functools import partial
+from time import sleep
 
 
 class JogOperationFrame(tk.Frame):
@@ -90,6 +91,7 @@ class JogOperationFrame(tk.Frame):
     def set_speed(self, speed):
         if self.app.com_port:
             self.app.com_port.send_message(f"SP {speed}")
+            sleep(0.2)
 
     def close_gripper(self):
         if self.app.com_port:
