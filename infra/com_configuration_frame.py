@@ -59,7 +59,7 @@ class PortConfigurationFrame(ttk.Frame):
 
         # Combobox
         self.port_combobox = ttk.Combobox(self.com_options_frame, textvariable=self.param_dict['Port'])
-        self.port_combobox['values'] = ('COM1', 'COM2', 'COM3', 'COM4', 'COM5')
+        self.port_combobox['values'] = ('COM1', 'COM2', 'COM3', 'COM4', 'COM5', 'COM6', 'COM7')
         self.port_combobox.grid(row=0, column=1, **options)
         self.baud_rate_combobox = ttk.Combobox(self.com_options_frame, textvariable=self.param_dict['Baud Rate'])
         self.baud_rate_combobox['values'] = (2400, 4800, 9600, 19200, 115200)
@@ -92,7 +92,7 @@ class PortConfigurationFrame(ttk.Frame):
     def insert_default_settings(self):
         self.param_dict['Send Timeout'].set(2)
         self.param_dict['Receive Timeout'].set(5)
-        self.param_dict['Port'].set('COM5')
+        self.param_dict['Port'].set('COM7')
         self.param_dict['Baud Rate'].set(9600)
         self.param_dict['Data Bits'].set(8)
         self.param_dict['Parity'].set('Even')
