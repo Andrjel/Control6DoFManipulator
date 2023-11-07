@@ -22,7 +22,6 @@ class ToolBox(ttk.Frame):
         self.jog_operation_button = tk.Button(self.toolbox_frame, text="Jog Operation",
                                               command=self.open_jog_operation_window)
         self.jog_operation_button.pack(side="left")
-        self.grid(row=0, column=0)
 
         # button for openning XYZ operation window
         self.XYZ_operation_button = tk.Button(self.toolbox_frame, text="XYZ Operation",
@@ -46,6 +45,6 @@ class ToolBox(ttk.Frame):
     def open_XYZ_operation_window(self):
         self.xyz_window = tk.Toplevel()
         self.xyz_window.title("XYZ Operation")
-        self.xyz_window.geometry("260x460")
+        self.xyz_window.geometry("600x460")
         self.xyz_window.resizable(False, False)
         self.xyz_frame = XYZFrame(self.xyz_window, self.app)
