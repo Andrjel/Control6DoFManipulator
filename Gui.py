@@ -29,7 +29,7 @@ class ToolBox(ttk.Frame):
     def open_jog_operation_window(self):
         self.jog_window = tk.Toplevel()
         self.jog_window.title("Jog Operation")
-        self.jog_window.geometry("600x700")
+        self.jog_window.geometry("200x300")
         self.jog_frame = JogOperationFrame(self.jog_window, self.app)
 
 
@@ -38,13 +38,13 @@ class PortConfigurationFrame(ttk.Frame):
         super().__init__(container)
         self.app = app
         self.param_dict = {
-            'Send Timeout': tk.IntVar(),
-            'Receive Timeout': tk.IntVar(),
-            'Port': tk.StringVar(),
-            'Baud Rate': tk.IntVar(),
-            'Data Bits': tk.IntVar(),
-            'Parity': tk.StringVar(),
-            'Stop Bits': tk.DoubleVar()
+            'Send Timeout': tk.IntVar(value=2),
+            'Receive Timeout': tk.IntVar(value=5),
+            'Port': tk.StringVar(value='COM5'),
+            'Baud Rate': tk.IntVar(value=9600),
+            'Data Bits': tk.IntVar(value=8),
+            'Parity': tk.StringVar(value='Even'),
+            'Stop Bits': tk.DoubleVar(value=2.0)
         }
         options = {'padx': 5, 'pady': 5}
 
@@ -134,7 +134,7 @@ class PortConfigurationFrame(ttk.Frame):
     def on_connect(self):
         if self.app.com_port:
             return 0
-        com_port = ComPort(**{
+        connection_config = {
             'Port': self.param_dict['Port'].get(),
             'Baud Rate': self.param_dict['Baud Rate'].get(),
             'Data Bits': self.param_dict['Data Bits'].get(),
@@ -142,7 +142,8 @@ class PortConfigurationFrame(ttk.Frame):
             'Stop Bits': self.param_dict['Stop Bits'].get(),
             'Send Timeout': self.param_dict['Send Timeout'].get(),
             'Read Timeout': self.param_dict['Receive Timeout'].get()
-        })
+        }
+        com_port = ComPort(**connection_config)
         self.app.set_com_port(com_port)
 
     def on_disconnect(self):
@@ -215,7 +216,8 @@ class WczytywanieDanych(ttk.Frame):
         self.place(x=0, y=25, width=500, height=50)
         # buttons for send
         self.send_button = tk.Button(self, text="Send", command=self.send_writen_command)
-        self.send_button.grid(row=3, column=1)
+        self.send_button.grid(row=0, column=2)
+        # Add frame for reading data from robot
 
     def send_writen_command(self):
         if self.entry_var and self.app.com_port is not None:
