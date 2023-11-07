@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from infra.com_configuration_frame import PortConfigurationFrame
 from infra.jog_operation_frame import JogOperationFrame
+from infra.xyz_frame import XYZFrame
 
 
 class ToolBox(ttk.Frame):
@@ -23,6 +24,12 @@ class ToolBox(ttk.Frame):
         self.jog_operation_button.pack(side="left")
         self.grid(row=0, column=0)
 
+        # button for openning XYZ operation window
+        self.XYZ_operation_button = tk.Button(self.toolbox_frame, text="XYZ Operation",
+                                              command=self.open_XYZ_operation_window)
+        self.XYZ_operation_button.pack(side="left")
+        self.grid(row=0, column=0)
+
     def open_port_config_window(self):
         self.port_window = tk.Toplevel()
         self.port_window.title("Port Configuration")
@@ -35,3 +42,10 @@ class ToolBox(ttk.Frame):
         self.jog_window.geometry("260x460")
         self.jog_window.resizable(False, False)
         self.jog_frame = JogOperationFrame(self.jog_window, self.app)
+
+    def open_XYZ_operation_window(self):
+        self.xyz_window = tk.Toplevel()
+        self.xyz_window.title("XYZ Operation")
+        self.xyz_window.geometry("260x460")
+        self.xyz_window.resizable(False, False)
+        self.xyz_frame = XYZFrame(self.xyz_window, self.app)

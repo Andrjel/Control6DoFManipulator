@@ -4,7 +4,7 @@ from functools import partial
 from time import sleep
 
 
-class JogOperationFrame(tk.Frame):
+class XYZFrame(tk.Frame):
     def __init__(self, container, app):
         super().__init__(container)
         self.app = app
@@ -88,67 +88,3 @@ class JogOperationFrame(tk.Frame):
 
         self.pack()
 
-    def set_speed(self, speed):
-        if self.app.com_port:
-            self.app.com_port.send_message(f"SP {speed}")
-            sleep(0.2)
-
-    def close_gripper(self):
-        if self.app.com_port:
-            self.app.com_port.send_message("GC")
-
-    def open_gripper(self):
-        if self.app.com_port:
-            self.app.com_port.send_message("GO")
-
-    def move_joint(self, joint, direction):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move[joint] + direction)
-
-    def move_waist_left(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Waist"] + "-" + str(self.jog_increment.get()))
-
-    def move_waist_right(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Waist"] + str(self.jog_increment.get()))
-
-    def move_shoulder_left(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Shoulder"] + "-" + str(self.jog_increment.get()))
-
-    def move_shoulder_right(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Shoulder"] + str(self.jog_increment.get()))
-
-    def move_elbow_left(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Elbow"] + "-" + str(self.jog_increment.get()))
-
-    def move_elbow_right(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Elbow"] + str(self.jog_increment.get()))
-
-    def move_twist_left(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Twist"] + "-" + str(self.jog_increment.get()))
-
-    def move_twist_right(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Twist"] + str(self.jog_increment.get()))
-
-    def move_pitch_left(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Pitch"] + "-" + str(self.jog_increment.get()))
-
-    def move_pitch_right(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Pitch"] + str(self.jog_increment.get()))
-
-    def move_roll_left(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Roll"] + "-" + str(self.jog_increment.get()))
-
-    def move_roll_right(self):
-        if self.app.com_port:
-            self.app.com_port.send_message(self.joints_move["Roll"] + str(self.jog_increment.get()))
