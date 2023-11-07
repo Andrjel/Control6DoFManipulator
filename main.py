@@ -1,16 +1,8 @@
-import Gui
-from ComConnection import ComPort
-from Gui import *
-# TODO: Jog operator do sterowania ruchem robota w przestrzeni zmiennych konfiguracyjnych
+from gui import *
 
 
 def main():
-    # Starting gui
-    # Create gui object and start our app
-    app = App()
-    app.mainloop()
-    # com = ComPort("COM5")
-    # com.write(b'Hello')
+    App()
 
 
 if __name__ == "__main__":

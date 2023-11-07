@@ -37,10 +37,7 @@ class ComPort(serial.Serial):
                          parity=self.__parity, stopbits=self.__stopbits,
                          timeout=self.__read_timeout, write_timeout=self.__send_timeout)
 
-
-def main():
-    pass
-
-
-if __name__ == "__main__":
-    main()
+    def send_message(self, message: str):
+        if self.is_open:
+            mes = message + '\r'
+            self.write(mes.encode('utf-8'))
