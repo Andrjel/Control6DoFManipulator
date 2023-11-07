@@ -22,7 +22,6 @@ class ToolBox(ttk.Frame):
         self.jog_operation_button = tk.Button(self.toolbox_frame, text="Jog Operation",
                                               command=self.open_jog_operation_window)
         self.jog_operation_button.pack(side="left")
-        self.grid(row=0, column=0)
 
         # button for openning XYZ operation window
         self.XYZ_operation_button = tk.Button(self.toolbox_frame, text="XYZ Operation",

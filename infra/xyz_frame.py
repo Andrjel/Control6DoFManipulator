@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from functools import partial
-from time import sleep
 
 
 class XYZFrame(tk.Frame):
@@ -15,9 +14,9 @@ class XYZFrame(tk.Frame):
         tk.Label(self.command_frame, text='Command').grid(row=0, column=0, **options)
         xyz_entry = []
         xyz_var = {}
-        for ori in ['x', 'y', 'z']:
+        for idx, ori in enumerate(['x', 'y', 'z']):
             xyz_var[ori] = tk.StringVar()
             xyz_entry.append(tk.Entry(self.command_frame, textvariable=xyz_var[ori]))
-            xyz_entry[i].pack(**options)
+            xyz_entry[idx].grid(row=1, column=idx, **options)
 
         self.pack()
