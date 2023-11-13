@@ -45,6 +45,6 @@ class ToolBox(ttk.Frame):
     def open_XYZ_operation_window(self):
         self.xyz_window = tk.Toplevel()
         self.xyz_window.title("XYZ Operation")
-        self.xyz_window.geometry("260x460")
+        self.xyz_window.geometry("600x460")
         self.xyz_window.resizable(False, False)
         self.xyz_frame = XYZFrame(self.xyz_window, self.app)

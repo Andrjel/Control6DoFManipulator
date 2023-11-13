@@ -9,7 +9,7 @@ class XYZFrame(tk.Frame):
         self.app = app
         options = {'padx': 5, 'pady': 5}
 
-        self.command_frame = tk.Frame(self, background='grey', highlightthickness=1, **options)
+        self.command_frame = tk.Frame(self, highlightbackground='grey', highlightthickness=1, **options)
         self.command_frame.grid(row=0, column=0)
         tk.Label(self.command_frame, text='Command').grid(row=0, column=0, **options)
         xyz_entry = []
