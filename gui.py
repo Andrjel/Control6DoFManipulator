@@ -11,7 +11,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title('Roboty Przemyslowe')
-        self.geometry('500x300')
+        self.geometry('415x215')
         self.com_port = None
         ToolBox(self, self)
         WczytywanieDanych(self)
