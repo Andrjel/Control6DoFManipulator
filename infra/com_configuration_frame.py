@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 from tkinter import ttk
 from com_connection import ComPort
 
@@ -103,6 +104,7 @@ class PortConfigurationFrame(ttk.Frame):
 
     def on_connect(self):
         if self.app.com_port:
+            messagebox.showinfo("Connection", "Already connected to port: " + self.app.com_port.port)
             return 0
         connection_config = {
             'Port': self.param_dict['Port'].get(),
@@ -115,10 +117,15 @@ class PortConfigurationFrame(ttk.Frame):
         }
         com_port = ComPort(**connection_config)
         self.app.set_com_port(com_port)
+        messagebox.showinfo("Connection", "Connected to port: " + connection_config['Port'])
 
     def on_disconnect(self):
+        if not self.app.com_port:
+            messagebox.showinfo("Connection", "Not connected")
+            return 0
         self.app.com_port.close()
         self.app.com_port = None
+        messagebox.showinfo("Connection", "Disconnected")
 
     def send_some_info(self):
         if self.app.com_port:
